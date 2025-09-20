@@ -1,5 +1,8 @@
+import os
+
 from models import Client
-from views import display_client_input, display_delete_client
+from views import display_client_input, display_delete_client, delete_client_message, updated_client_name
+
 
 # first we will need to create a class for clients so we can add/edit
 # and delete them.  then we should initialize the client class and define
@@ -12,48 +15,52 @@ class ClientController:
         self.name_of_client = None
 
     def add_client(self):
-        while True:
-            name_of_client, phone_number = display_client_input()
-            client = Client(name_of_client, phone_number)
+        os.system('clear')
+        print("Welcome to the future to add a client")
+        name_of_client, phone_number, address, work_title = display_client_input()
+        client = Client(name_of_client, phone_number, address, work_title)
     # append to add a client object, not just the name as it was before
-            self.client_list.append(client)
-            print(f"client: {client.name} added successfully {client.phone_number}")
-            more_info = input("Do you want to add another client? [y/n]")
-            if more_info != "y":
-                break
+        self.client_list.append(client)
+
+
+
 
 
     def list_clients(self):
-        for client in self.client_list:
-            print(client.name)
-
-    # error handling if the name or something goes wrong?
-    def update_client(self):
-        name_of_client = input("Enter name of client to update")
-        for client in self.client_list:
-            if client.name == name_of_client:
-                new_name = input("Enter new name")
-                client.name = new_name
-                print(f"Client {client.name} updated successfully")
+            if not self.client_list:
                 return
-            else:
-                print(f"Client {client.name} not found.")
+            for client in self.client_list:
+                print(f"{client.name_of_client}: {client.phone_number}: {client.address}: {client.work_title}")
+
+
+    def update_client(self):
+        name_of_client, new_client = updated_client_name()
+        for client in self.client_list:
+            if client.name_of_client == name_of_client: #iterate through clients and get new name
+                client.name_of_client = new_client # the updated client name to BE the client name =
+                return
+
+
 
     def delete_client(self):
-        # if name of client is in list or database we allow deletion if not then it goes into except (didnt' find)
         name_of_client = display_delete_client()
+        # import pdb;
+        # pdb.set_trace()
         for client in self.client_list:
-            if client.name == name_of_client:
+            if client.name_of_client == name_of_client:
                 self.client_list.remove(client)
-                print(f"Client {client.name} deleted successfully")
+                delete_client_message(name_of_client, True)
                 return
-            else:
-                print(f"client: {name_of_client} is not in the list")
+        delete_client_message(name_of_client, False)
+
+
+
 
 
 
     def main(self):
         while True:
+            os.system('clear')
             print("************************")
             print("Welcome to CliManager v1.0")
             print("************************")
