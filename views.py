@@ -1,7 +1,7 @@
 from curses.ascii import isalpha
 import re
 
-from faker.providers import phone_number
+
 
 
 def display_client_input():
@@ -26,7 +26,7 @@ def add_client():
         phone_number = input("Enter your client's phone number: ")
         address = input("Enter your client's address: ")
         work_title = input("Enter your client's work title: ")
-        print(f"Client name: {name_of_client} and phone number: {phone_number} added successfully")
+        print(f"Client name: {name_of_client} phone number: {phone_number} address: {address} and work title: {work_title} added successfully")
         more_info = input("Do you want to add another client? [y/n]")
         if more_info != "y":
             break
