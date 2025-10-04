@@ -2,7 +2,8 @@ import os
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 from models import Client, Base
-from views import display_client_input, display_delete_client, delete_client_message, updated_client_name
+from views import display_client_input, display_delete_client, delete_client_message, updated_client_name, \
+    display_clients
 
 engine = create_engine("sqlite:///mydb.sqlite", echo=True)
 Session = sessionmaker(engine)
@@ -35,10 +36,10 @@ class ClientController:
     # when create an instance use Named Parameters always - order doesn't matter
 
     def list_clients(self):
-            if not self.client_list:
-                return
-            for client in self.client_list:
-                print(f"{client.name_of_client}: {client.phone_number}: {client.address}: {client.work_title} ")
+        with Session() as session:
+            clients = session.query(Client).all()
+            display_clients(clients)
+
 
 
     def update_client(self):
@@ -54,13 +55,7 @@ class ClientController:
 
     def delete_client(self):
         name_of_client = display_delete_client()
-        # import pdb;
-        # pdb.set_trace()
-        # for client in self.client_list:
-        #     if client.name_of_client == name_of_client:
-        #         self.client_list.remove(client)
-        #         delete_client_message(name_of_client, True)
-        #         return
+
         delete_client_message(name_of_client, False)
         with Session() as session:
             client = session.execute(select(Client).filter_by(name_of_client=name_of_client)).scalar_one()

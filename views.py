@@ -51,10 +51,12 @@ def delete_client_message(name_of_client, message=True):
 
 
 def display_clients(client_list):
-    for client in client_list:
-        print(f"{client.name_of_client}: {client.phone_number}")
-    else:
+    if not client_list:
         print("No clients found")
+        return
+    for client in client_list:
+        print(f"{client.name_of_client}: {client.phone_number}: {client.address}: {client.work_title} ")
+
 
 
 def updated_client_name():
